@@ -9,7 +9,17 @@ from selenium.webdriver.common.by import By
 
 
 
+# from gspread import authorize
+# from oauth2client.service_account import ServiceAccountCredentials
 
+# scopes = ["https://spreadsheets.google.com/feeds",
+#                   "https://www.googleapis.com/auth/spreadsheets",
+#                   "https://www.googleapis.com/auth/drive",
+#                   "https://www.googleapis.com/auth/drive"]
+# cred = ServiceAccountCredentials.from_json_keyfile_name("sau.json", scopes)
+# gclient = authorize(cred)
+# sheet = gclient.open('purplle-moksh').worksheet('Sheet1')
+sheetadd_list=[]
 
 
 
@@ -105,7 +115,7 @@ import time
 
 # for div_tag in div_tags:
 #     text = div_tag.text
-#     reviews.append(text)
+#   reviews.append(text)
 # for i in reviews:
 #     print(i)
 #     print('----------')
@@ -136,9 +146,50 @@ div_tags = soup.findAll("div", {"class": "bc-std10"})
 
 # Extract the information from each div tag
 reviews = []
-for div_tag in div_tags:
-    text = div_tag.text
-    reviews.append(text)
+
+for div in div_tags:
+    try:
+        cust_name=div.find("p",{"class":"t-left mr0 pdr5 desk_f16 f14 fanB tx-b"}).text
+        # reviews.append(cust_name)
+    except:
+        cust_name=''
+    try:
+        cust_rate_date=div.find("p",{"class":"mr0 db"}).text
+        # reviews.append(cust_rate_date)
+    except:
+        cust_rate_date=''
+    try:
+        cust_onelinerev=div.find("p",{"class":"mrb0 mrt10 desk_f14 fanSB f13 lh18 tx-b"}).text
+        # reviews.append(cust_onelinerev)
+    except:
+        cust_onelinerev=''
+    try:
+        cust_rev=div.find("p",{"class":"mrb0 mrt10 mrb15 desk_f13 desk_dn fanM f11 lh18 tx-b"}).text
+        # reviews.append(cust_rev)
+    except:
+        cust_rev=''
+    try:
+        certified=div.find("p",{"class":"t-left dib tx-med mr0 f-right fanSB f11"}).text
+        # reviews.append(certified)
+    except:
+        certified=''
+    try:
+        tags=div.find("p",{"class":"que-ul t-lefti"}).text
+        # reviews.append(tags)
+    except:
+        tags=''
+    #brt1s bc-0-29
+    try:
+        helpful_or_not=div.find("p",{"class":"brt1s bc-0-29"}).text
+        # reviews.append(helpful_or_not)
+    except:
+        helpful_or_not=''
+    reviews=[cust_name,cust_rate_date,cust_onelinerev,cust_rev,certified,tags,helpful_or_not]
+
+    for i in reviews:
+        print('-->',i)
+    
+sheetadd_list.append(reviews)
 
 # Find the 'Show More' button
 show_more_button = driver.find_element(By.XPATH,"/html/body/app-root/main/app-product-review/div[2]/div/div/div/div/div/div/div[1]/div/div[14]/div/a")
@@ -159,22 +210,100 @@ soup = BeautifulSoup(html_source, "html.parser")
 div_tags = soup.findAll("div", {"class": "bc-std10"})
 
 # Extract the information from each updated div tag
-for div_tag in div_tags:
-    text = div_tag.text
-    reviews.append(text)
+for div in div_tags:
+    try:
+        cust_name=div.find("p",{"class":"t-left mr0 pdr5 desk_f16 f14 fanB tx-b"}).text
+        # reviews.append(cust_name)
+    except:
+        cust_name=''
+    try:
+        cust_rate_date=div.find("p",{"class":"mr0 db"}).text
+        # reviews.append(cust_rate_date)
+    except:
+        cust_rate_date=''
+    try:
+        cust_onelinerev=div.find("p",{"class":"mrb0 mrt10 desk_f14 fanSB f13 lh18 tx-b"}).text
+        # reviews.append(cust_onelinerev)
+    except:
+        cust_onelinerev=''
+    try:
+        cust_rev=div.find("p",{"class":"mrb0 mrt10 mrb15 desk_f13 desk_dn fanM f11 lh18 tx-b"}).text
+        # reviews.append(cust_rev)
+    except:
+        cust_rev=''
+    try:
+        certified=div.find("p",{"class":"t-left dib tx-med mr0 f-right fanSB f11"}).text
+        # reviews.append(certified)
+    except:
+        certified=''
+    try:
+        tags=div.find("p",{"class":"que-ul t-lefti"}).text
+        # reviews.append(tags)
+    except:
+        tags=''
+    #brt1s bc-0-29
+    try:
+        helpful_or_not=div.find("p",{"class":"brt1s bc-0-29"}).text
+        # reviews.append(helpful_or_not)
+    except:
+        helpful_or_not=''
+    reviews=[cust_name,cust_rate_date,cust_onelinerev,cust_rev,certified,tags,helpful_or_not]
+
+for i in reviews:
+    print('::',i)
+sheetadd_list.append(reviews)
 
 # Repeat the above steps until there are no more 'Show More' buttons
 while True:
     try:
+
         show_more_button = driver.find_element(By.XPATH,"/html/body/app-root/main/app-product-review/div[2]/div/div/div/div/div/div/div[1]/div/div[14]/div/a")
         show_more_button.click()
         time.sleep(10)
         html_source = driver.page_source
         soup = BeautifulSoup(html_source, "html.parser")
         div_tags = soup.findAll("div", {"class": "bc-std10"})
-        for div_tag in div_tags:
-            text = div_tag.text
-            reviews.append(text)
+        for div in div_tags:
+            try:
+                cust_name=div.find("p",{"class":"t-left mr0 pdr5 desk_f16 f14 fanB tx-b"}).text
+                # reviews.append(cust_name)
+            except:
+                cust_name=''
+            try:
+                cust_rate_date=div.find("p",{"class":"mr0 db"}).text
+                # reviews.append(cust_rate_date)
+            except:
+                cust_rate_date=''
+            try:
+                cust_onelinerev=div.find("p",{"class":"mrb0 mrt10 desk_f14 fanSB f13 lh18 tx-b"}).text
+                # reviews.append(cust_onelinerev)
+            except:
+                cust_onelinerev=''
+            try:
+                cust_rev=div.find("p",{"class":"mrb0 mrt10 mrb15 desk_f13 desk_dn fanM f11 lh18 tx-b"}).text
+                # reviews.append(cust_rev)
+            except:
+                cust_rev=''
+            try:
+                certified=div.find("p",{"class":"t-left dib tx-med mr0 f-right fanSB f11"}).text
+                # reviews.append(certified)
+            except:
+                certified=''
+            try:
+                tags=div.find("p",{"class":"que-ul t-lefti"}).text
+                # reviews.append(tags)
+            except:
+                tags=''
+            #brt1s bc-0-29
+            try:
+                helpful_or_not=div.find("p",{"class":"brt1s bc-0-29"}).text
+                # reviews.append(helpful_or_not)
+            except:
+                helpful_or_not=''
+            reviews=[cust_name,cust_rate_date,cust_onelinerev,cust_rev,certified,tags,helpful_or_not]
+            for i in reviews:
+                print('-->',i)
+            sheetadd_list.append(reviews)
     except:
         break
 
@@ -182,10 +311,10 @@ while True:
 driver.quit()
 
 # Do something with the reviews
-with open('purplle1.csv', 'w', newline='', encoding='utf-8') as file:
+with open('purplle-moksh-1.csv', 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerows(reviews)
-
+        writer.writerow(header)
+        writer.writerows(sheetadd_list)
 
 
 print(reviews)
